@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import SimpleAsset from './components/SimpleAsset.js';
+import ShowSum from './components/ShowSum.js';
 import axios from 'axios';
 import mongoose from 'mongoose';
 
@@ -88,6 +89,8 @@ export default class App extends Component {
             <tr><th>description</th><th>value</th><th>action</th></tr>
             {/*if the JavaScript code returns an array of React components, then the generated code will loop through the array and render all components in the array*/}
             {this.state.assets}
+
+            <ShowSum count="5"/>
           </tbody>
         </table>
       </div>
@@ -126,8 +129,10 @@ export default class App extends Component {
       }
     );
     console.log(newAsset);
+
   }
 
+ 
   //the next method is called when the "sell or dispose" button of any of the "SimpleAsset" components is clicked
 
   handleDeleteAsset(event) {
@@ -148,7 +153,7 @@ export default class App extends Component {
       {
         assets: newAssets
       }
-    );
+    )
   }
 
   //the next method is just a helper to save a new asset in the database

@@ -20,3 +20,8 @@
 .App-link {
   color: #09d3ac;
 }
+
+.sumline {
+  font-weight: bold;
+  background-color: lightblue;
+}
