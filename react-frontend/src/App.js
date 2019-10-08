@@ -15,28 +15,19 @@ export default class App extends Component {
     this.handleCreateAsset = this.handleCreateAsset.bind(this);
     this.handleDeleteAsset = this.handleDeleteAsset.bind(this);
 
-    //The dynamic data that any component shows to the user has to be stored in a property called "state"
-    //that belongs to the JavaScript Object that represents the "App" component
-    //the next line will initalize the state with an empty array of assets
 
     this.state = {
-      assets: []
+      assets: [],
+      currentCount: 0
     }
   }
 
-  //before the App component will be rendered, the React framework calls the following method
 
   componentDidMount() {
     console.log("componentDidMount, assets will be loaded from the database");
 
-    //The axios library will be used to ask the express server to deliver the data of the assets that are already in the database 
-    //by sending a get request to the express rest api
 
     axios.get('http://localhost:8080/assets/').then(response => {
-
-      //this code will be executed as soon as the browser receives the response from the express server
-      //in order to see how the response.data was created open the file /express-mongo-backend/server.js
-      //and look for the line: assetRoutes.route('/').get(function (req, res) {
 
       console.log(response.data);
 
@@ -48,35 +39,21 @@ export default class App extends Component {
           asset_name: "This is an example, press Edit to change name and Value",
           asset_value: "0"
         }
-        //we add the new asset to the mongodb database
+      
         this.saveAssetToDatabase(exampleAsset);
-        //and we put in in response.data (although it was actually not in the response, but that is where we expect the data to be later...)
+        
         response.data = [exampleAsset];
       }
 
-      //in "response.data" we now either have an array with the example asset or all the assets that are in the database
-      //we now need to change the state of this react component
-      //when the state is changed, the component has to be rendered again
-      //this is done by the react framework
-      //the framework will invoke the "render" methode (that you will see later in this file) to create the new HTML that shows the new state
-      //in order for the framework to know that the state has changed, we have to change the state by calling the method "setState()", not by just assigning it to "this.state"
-
       this.setState({
-        //we will not just put the asset data in the state, but create React components that can render the data and put them in the state
-        //to see how a "SimpleAsset" renders and works, look into the file /react-frontend/components/SimpleAsset.js
-        assets: response.data.map(asset => <SimpleAsset key={asset._id} onDelete={this.handleDeleteAsset} asset={asset} />)
+       assets: response.data.map(asset => <SimpleAsset key={asset._id} onDelete={this.handleDeleteAsset} asset={asset} />),
+        currentCount: response.data.length
       });
     }).catch(function (error) { console.log(error); })
   }
 
-  //every React component needs to have a render method
-  //it creates the HTML to update the browser window when the component is shown for the first time and whenever the state is changed through "setState"
-  render() {
-    //the following code is no correct JavaScript
-    //the code that looks like HTML will be transformed into JavaScript code that renders the HTML into the DOM 
-    //that is one of the things that happens, when you test the react application by running "npm start"
-    //it is done by a program called JSX-compiler
-    //be carefull, the code looks like HTML but is actually not exactly the same as HTML, read the react documentation for the details
+   render() {
+
     return (
       <div>
         <h1>simple asset management application</h1>
@@ -90,12 +67,16 @@ export default class App extends Component {
             {/*if the JavaScript code returns an array of React components, then the generated code will loop through the array and render all components in the array*/}
             {this.state.assets}
 
-            <ShowSum count="5"/>
+            <ShowSum count={this.state.currentCount}/>   
+            
           </tbody>
         </table>
       </div>
     );
   }
+
+  // <ShowSum count="5"/> 
+
 
   //the next method is called when the "create asset" button is clicked
 
@@ -125,7 +106,8 @@ export default class App extends Component {
     //the ".setState()" method. The method takes all properties of the state we want to change as arguments.
     this.setState(
       {
-        assets: newAssets
+        assets: newAssets,
+        currentCount: newAssets.length
       }
     );
     console.log(newAsset);
@@ -151,7 +133,8 @@ export default class App extends Component {
     })
     this.setState(
       {
-        assets: newAssets
+        assets: newAssets,
+        currentCount: newAssets.length
       }
     )
   }
