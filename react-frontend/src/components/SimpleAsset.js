@@ -27,7 +27,7 @@ export default class SimpleAsset extends Component {
             return (
                 <tr>
                     <td><input type="text" name="name" value={this.state.asset.asset_name} onChange={this.handleNameChange} /></td>
-                    <td><input type="text" name="value" value={this.state.asset.asset_value} onChange={this.handleValueChange} /> €</td>
+                    <td><input type="number" name="value" value={this.state.asset.asset_value} onChange={this.handleValueChange} /> €</td>
                     <td> <button onClick={this.handleSave} id={this.state.asset._id}>save</button></td>
                 </tr>
             )
@@ -42,6 +42,8 @@ export default class SimpleAsset extends Component {
                     </td>
                 </tr>
             )
+                
+
     }
 
     handleNameChange(event) {
@@ -59,18 +61,25 @@ export default class SimpleAsset extends Component {
             asset: {
                 _id: this.state.asset._id,
                 asset_name: this.state.asset.asset_name,
-                asset_value: event.target.value
+                asset_value: event.target.valueAsNumber
             }
         });
     }
 
     handleSave(event) {
-        const IdOfAssetToDelete = event.target.id;
+        const IdOfAssetToSave = event.target.id;
   
-        axios.post('http://localhost:8080/assets/update/' + IdOfAssetToDelete, this.state.asset)
+        axios.post('http://localhost:8080/assets/update/' + IdOfAssetToSave, this.state.asset)
             .then(res => console.log(res.data));
 
-        this.setState({ edit_mode: false });
+           
+        this.setState({ 
+            edit_mode: false});
+
+            this.props.refresh(this.state.asset)
+
+           
+            
     }
     handleEdit() {
         this.setState({ edit_mode: true });

@@ -9,7 +9,7 @@ let Asset = new Schema({
         type: String
     },
     asset_value: {
-        type: String
+        type: Number
     }
 });
 
