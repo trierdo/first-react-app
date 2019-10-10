@@ -1,10 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
+//import React, { Component } from 'react';
 import axios from 'axios';
+import { IAsset } from '../App';
+
+interface IProps {
+    onDelete: Function;
+    refresh: Function;
+    edit: boolean;
+    asset: IAsset;
+}
+interface IState {
+    delete_function:any;
+    edit_mode:boolean;
+    asset:IAsset;
+}
 
 
-export default class SimpleAsset extends Component {
+export default class SimpleAsset extends React.PureComponent<IProps, IState> {
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
 
         this.handleEdit = this.handleEdit.bind(this);
@@ -46,7 +60,7 @@ export default class SimpleAsset extends Component {
 
     }
 
-    handleNameChange(event) {
+    handleNameChange(event:any) {
         this.setState({
             asset: {
                 _id: this.state.asset._id,
@@ -56,7 +70,7 @@ export default class SimpleAsset extends Component {
         });
     }
 
-    handleValueChange(event) {
+    handleValueChange(event:any) {
         this.setState({
             asset: {
                 _id: this.state.asset._id,
@@ -66,8 +80,8 @@ export default class SimpleAsset extends Component {
         });
     }
 
-    handleSave(event) {
-        const IdOfAssetToSave = event.target.id;
+    handleSave(event:any) {
+        const IdOfAssetToSave: string = event.target.id;
   
         axios.post('http://localhost:8080/assets/update/' + IdOfAssetToSave, this.state.asset)
             .then(res => console.log(res.data));

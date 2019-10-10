@@ -1,10 +1,16 @@
-import React, {
-    Component
-} from 'react';
+import React from 'react';
+//import React, {Component} from 'react';
+import { IAsset } from '../App';
 
-export default class ShowSum extends Component {
+interface IState { }
+interface IProps {
+    count: number;
+    assets: IAsset[];
+}
 
-    constructor(props) {
+export default class ShowSum extends React.PureComponent<IProps, IState> {
+
+    constructor(props: IProps) {
         super(props);
 
 
@@ -22,7 +28,7 @@ export default class ShowSum extends Component {
         )
         }
 
-        calculateSum(list) {
+        calculateSum(list: IAsset[]) {
             return list.reduce((acc, value) => {return acc+value.asset_value},0)  }
 
     }

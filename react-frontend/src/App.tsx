@@ -1,13 +1,26 @@
 import React, { Component } from 'react';
 import './App.css';
-import SimpleAsset from './components/SimpleAsset.js';
-import ShowSum from './components/ShowSum.js';
+import SimpleAsset from './components/SimpleAsset';
+import ShowSum from './components/ShowSum';
 import axios from 'axios';
 import mongoose from 'mongoose';
 
-export default class App extends Component {
+interface IProps {}
 
-  constructor(props) {
+interface IState {
+  assets: IAsset[];
+  currentCount: number;  
+}
+
+export interface IAsset {
+  _id: string;
+  asset_name: string;
+  asset_value: number;
+}
+
+export default class App extends React.PureComponent<IProps, IState> {
+
+  constructor(props: IProps) {
     console.log("new App component will be initialized");
     super(props);
 
@@ -98,7 +111,7 @@ export default class App extends Component {
   }
 
  
-  handleDeleteAsset(event) {
+  handleDeleteAsset(event:any) {
     const IdOfAssetToDelete = event.target.id;
     //console.log("Delete asset with _id:" + IdOfAssetToDelete);
 
@@ -117,12 +130,12 @@ export default class App extends Component {
     )
   }
 
-  saveAssetToDatabase(asset) {
+  saveAssetToDatabase(asset:IAsset) {
     axios.post('http://localhost:8080/assets/add', asset)
       .then(res => console.log(res.data));
   }
 
-  refreshApp(asset) {
+  refreshApp(asset:IAsset) {
 
   let assetIndex = this.state.assets.findIndex(assetElem => assetElem._id === asset._id);
 
